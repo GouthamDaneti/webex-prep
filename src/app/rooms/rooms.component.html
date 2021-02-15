@@ -1,0 +1,23 @@
+<div class="center-div">
+    <h1 class="text-center">Welcome to rooms...</h1>
+</div>
+<div class="create-rooms">
+  <!-- Receive input and update CurrRoomName to be created on button click-->
+  <input type="text" id="currRoomName" [(ngModel)]="currRoomName">
+  &nbsp;
+  &nbsp;
+  <button (click)="createRoom()">Create Room</button>
+  <br>
+  <br>
+  <input type="text" id="message" [(ngModel)]="message">
+  &nbsp;
+  &nbsp;
+  <button (click)="sendMessage()">Send Message</button>
+  <br>
+  <br>
+  <input type="text" id="memberEmail" [(ngModel)]="memberEmail">
+  &nbsp;
+  &nbsp;
+  <button (click)="addPeople()">Add Member</button>
+
+</div>
