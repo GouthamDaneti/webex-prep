@@ -20,7 +20,7 @@ export class RoomsComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {
+  async ngOnInit() {
     console.log("Goutham's, Token value is: " + localStorage.getItem('webex_token'));
     if (localStorage.getItem('webex_token')) {
       this.webex = WebexSDK.init({
@@ -36,6 +36,7 @@ export class RoomsComponent implements OnInit {
     } else {
       window.alert("Token not set, while login.");
     }
+    this.listRooms();
   }
 
   async createRoom() {
@@ -77,13 +78,9 @@ export class RoomsComponent implements OnInit {
     }
   }
 
-  /*listRooms() {
-    this.webex.onListRoom().then((rooms) => {
-      console.log(rooms)
-    })
-  }
+  listRooms() {
+      var roomsList = this.webex.rooms.list();
+      console.log(roomsList);
 
-  onLogout() {
-    this.webex.onLogout()
-  }*/
+  }
 }

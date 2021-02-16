@@ -22,13 +22,12 @@ export class LoginComponent implements OnInit {
 
   async ngOnInit() {
     // Login here:
-    this.initWebexSDK();
-    this.listenForToken();
-    this.routeToRooms();
+    this.initWebexSDK(this.listenForToken);
+    //this.routeToRooms();
     //this.initWebexSDKWithToken();
   }
 
-  initWebexSDK() {
+  initWebexSDK(callBackFun) {
     this.webex = WebexSDK.init({
       config: {
         meetings: {
@@ -55,24 +54,26 @@ export class LoginComponent implements OnInit {
         this.webex.authorization.initiateLogin();
       }
     });
+    callBackFun(this.routeToRooms, this.webex, this.router, this.redirectRoomsCount);
   }
 
-  async listenForToken() {
-    this.webex.once(`ready`, () => {
-      console.log("READY with Token: ", this.webex.credentials.supertoken);
-      if (this.webex.credentials.supertoken){
-        localStorage.setItem('webex_token', this.webex.credentials.supertoken.access_token)
+  async listenForToken(callBackFun, webex, router, redirectRoomsCount) {
+    webex.once(`ready`, () => {
+      console.log("READY with Token: ", webex.credentials.supertoken);
+      if (webex.credentials.supertoken){
+        localStorage.setItem('webex_token', webex.credentials.supertoken.access_token)
       }
     });
+    callBackFun(router, redirectRoomsCount, callBackFun);
   }
 
-  routeToRooms() {
+  routeToRooms(router, redirectRoomsCount, callBackFun) {
     new Promise(resolve => setTimeout(() => {
         if (localStorage.getItem('webex_token')) {
-            this.router.navigate(['/rooms'])
-        } else if (this.redirectRoomsCount < 5){
-            this.redirectRoomsCount++;
-            this.routeToRooms();
+            router.navigate(['/rooms'])
+        } else if (redirectRoomsCount < 5){
+            redirectRoomsCount++;
+            callBackFun(router, redirectRoomsCount);
         } else {
           window.alert("Token not set, while login. So, not redirecting to rooms.");
         }
